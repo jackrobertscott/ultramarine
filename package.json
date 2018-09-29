@@ -1,16 +1,51 @@
 {
   "name": "ultramarine",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-scripts": "1.1.5"
+  "license": "MIT",
+  "main": "src/index.js",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "author": "Jack Scott <jack.rob.scott@gmail.com>",
+  "homepage": "https://github.com/jackrobertscott/ultramarine#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackrobertscott/ultramarine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jackrobertscott/ultramarine/issues"
   },
   "scripts": {
+    "prepublish": "npm run build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
+    "eject": "react-scripts eject",
+    "docz": "docz dev",
+    "docz:build": "docz build"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "styled-components": "^3.4.9"
+  },
+  "devDependencies": {
+    "docz": "^0.12.4",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "17.0.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.9.1",
+    "prettier": "^1.14.2",
+    "react-dom": "^16.5.2",
+    "react-scripts": "1.1.5"
+  },
+  "keywords": [
+    "styling",
+    "react",
+    "lego"
+  ]
 }

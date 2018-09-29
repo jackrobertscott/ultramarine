@@ -4,6 +4,8 @@
 
 See my [live stream](https://www.twitch.tv/jacrobsco) or contribute to the [planning page](https://www.notion.so/onetwothree/Guardian-6a9ee3266b7c4649adf993964029a9a5).
 
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

@@ -1,0 +1,61 @@
+---
+name: Shadow
+route: /element/shadow
+menu: Element
+---
+
+import { Playground, PropsTable } from 'docz';
+import { Element, Modal } from '../../lib';
+
+# Shadow
+
+Create a shadow on the element.
+
+### Usage
+
+```jsx
+<Element
+  shadow="simple"
+/>
+```
+
+```jsx
+<Element
+  shadow={{
+    color: 'green',
+    theme: 'phantom'
+  }}
+/>
+```
+
+### Examples
+
+<Playground>
+  <Element
+    colors="dark"
+    padding="nice"
+    margin={{ right: 'nice' }}
+  >
+    No shadow.
+  </Element>
+  <Element
+    colors="dark"
+    padding="nice"
+    margin={{ right: 'nice' }}
+    shadow="simple"
+  >
+    Simple shadow.
+  </Element>
+  <Element
+    colors="dark"
+    padding="nice"
+    margin={{ right: 'nice' }}
+    shadow="phantom"
+  >
+    Phantom shadow.
+  </Element>
+</Playground>
+
+### Properties
+
+<PropsTable of={Element} />

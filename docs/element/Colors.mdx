@@ -1,0 +1,63 @@
+---
+name: Colors
+route: /element/colors
+menu: Element
+---
+
+import { Playground, PropsTable } from 'docz';
+import { Element } from '../../lib';
+
+# Colors
+
+Add colors and styling to an element.
+
+### Usage
+
+```jsx
+<Element colors="dark" />
+```
+
+```jsx
+<Element
+  colors={{
+    theme: 'dark',
+    state: 'solid',
+    fonts: 'green',
+  }}
+/>
+```
+
+### Examples
+
+<Playground>
+  <Element colors="dark">
+    Simple dark background.
+  </Element>
+</Playground>
+
+<Playground>
+  <Element
+    colors={{
+      theme: 'dark',
+      state: 'solid',
+      fonts: 'green',
+    }}
+  >
+    Complex dark background.
+  </Element>
+</Playground>
+
+<Playground>
+  <Element
+    colors={{
+      theme: 'dark',
+      state: 'faded',
+    }}
+  >
+    Faded dark background.
+  </Element>
+</Playground>
+
+### Properties
+
+<PropsTable of={Element} />
