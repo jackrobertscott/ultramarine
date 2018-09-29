@@ -1,6 +1,6 @@
 {
   "name": "ultramarine",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "source": "lib/index.js",
   "main": "dist/index.js",
@@ -20,7 +20,7 @@
   "scripts": {
     "docz": "docz dev",
     "docz:build": "docz build",
-    "build": "microbundle",
+    "build": "rm -rf dist && NODE_ENV=production babel lib --out-dir dist --copy-files",
     "cra:start": "react-scripts start",
     "cra:build": "react-scripts build",
     "cra:test": "react-scripts test --env=jsdom",
@@ -32,6 +32,7 @@
     "styled-components": "^3.4.9"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "docz": "^0.12.4",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "17.0.0",
@@ -40,7 +41,6 @@
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.9.1",
-    "microbundle": "^0.6.0",
     "prettier": "^1.14.2",
     "react-dom": "^16.5.2",
     "react-scripts": "1.1.5"
