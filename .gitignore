@@ -26,3 +26,4 @@ package-lock.json
 
 # documentation
 .docz/
+.cache/

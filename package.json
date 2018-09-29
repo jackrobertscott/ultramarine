@@ -2,9 +2,10 @@
   "name": "ultramarine",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "lib/index.js",
+  "source": "lib/index.js",
+  "main": "dist/index.js",
   "files": [
-    "lib",
+    "dist",
     "README.md"
   ],
   "author": "Jack Scott <jack.rob.scott@gmail.com>",
@@ -17,12 +18,13 @@
     "url": "https://github.com/jackrobertscott/ultramarine/issues"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
     "docz": "docz dev",
-    "docz:build": "docz build"
+    "docz:build": "docz build",
+    "build": "microbundle",
+    "cra:start": "react-scripts start",
+    "cra:build": "react-scripts build",
+    "cra:test": "react-scripts test --env=jsdom",
+    "cra:eject": "cra:react-scripts eject"
   },
   "dependencies": {
     "prop-types": "^15.6.2",
@@ -38,6 +40,7 @@
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.9.1",
+    "microbundle": "^0.6.0",
     "prettier": "^1.14.2",
     "react-dom": "^16.5.2",
     "react-scripts": "1.1.5"
