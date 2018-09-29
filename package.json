@@ -2,9 +2,9 @@
   "name": "ultramarine",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "files": [
-    "src",
+    "lib",
     "README.md"
   ],
   "author": "Jack Scott <jack.rob.scott@gmail.com>",
