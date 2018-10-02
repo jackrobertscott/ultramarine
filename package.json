@@ -18,6 +18,7 @@
     "url": "https://github.com/jackrobertscott/ultramarine/issues"
   },
   "scripts": {
+    "dev": "nodemon",
     "docz": "docz dev",
     "docz:build": "docz build",
     "build": "rm -rf dist && NODE_ENV=production babel lib --out-dir dist --copy-files",
@@ -27,6 +28,7 @@
     "cra:eject": "cra:react-scripts eject"
   },
   "dependencies": {
+    "nodemon": "^1.18.4",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "styled-components": "^3.4.9"

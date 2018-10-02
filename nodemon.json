@@ -1,0 +1,12 @@
+{
+  "ignore": [
+    ".git",
+    "node_modules",
+    "**/*.test.*",
+    "**/*.spec.*"
+  ],
+  "watch": [
+    "lib"
+  ],
+  "exec": "yarn build"
+}
