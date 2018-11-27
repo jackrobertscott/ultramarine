@@ -1,55 +1,47 @@
 {
   "name": "ultramarine",
   "version": "0.1.1",
+  "private": false,
+  "description": "Improved logic management for React apps.",
+  "author": "Jack Scott <jack.rob.scott@gmail.com>",
   "license": "MIT",
-  "source": "lib/index.js",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
+  "source": "src/index.js",
   "files": [
-    "dist",
+    "lib",
     "README.md"
   ],
-  "author": "Jack Scott <jack.rob.scott@gmail.com>",
-  "homepage": "https://github.com/jackrobertscott/ultramarine#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jackrobertscott/ultramarine.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jackrobertscott/ultramarine/issues"
-  },
   "scripts": {
-    "dev": "nodemon",
-    "docz": "docz dev",
-    "docz:build": "docz build",
-    "build": "rm -rf dist && NODE_ENV=production babel lib --out-dir dist --copy-files",
-    "cra:start": "react-scripts start",
-    "cra:build": "react-scripts build",
-    "cra:test": "react-scripts test --env=jsdom",
-    "cra:eject": "cra:react-scripts eject"
+    "test": "mocha -r ts-node/register src/**/*.test.ts",
+    "build": "yarn run clean && yarn run compile",
+    "clean": "rm -rf lib",
+    "compile": "tsc"
   },
   "dependencies": {
-    "nodemon": "^1.18.4",
+    "@types/prop-types": "^15.5.6",
+    "@types/react": "^16.7.7",
     "prop-types": "^15.6.2",
-    "react": "^16.5.2",
-    "styled-components": "^3.4.9"
+    "react": "^16.6.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "docz": "^0.12.4",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb": "17.0.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-import": "^2.12.0",
-    "eslint-plugin-json": "^1.2.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.9.1",
-    "prettier": "^1.14.2",
-    "react-dom": "^16.5.2",
-    "react-scripts": "1.1.5"
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "prettier": "^1.15.2",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.1.6"
   },
   "keywords": [
-    "styling",
+    "css",
     "react",
-    "lego"
+    "style",
+    "styled",
+    "component",
+    "components"
   ]
 }
