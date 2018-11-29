@@ -17,6 +17,7 @@
   ],
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.test.ts",
+    "prepublishOnly": "yarn run build",
     "build": "yarn run clean && yarn run compile",
     "clean": "rm -rf lib",
     "compile": "tsc"
