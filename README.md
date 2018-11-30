@@ -46,12 +46,22 @@ import ultra from 'ultramarine';
  * Create a group of CSS properties and add some potential mutations.
  */
 const paddings = ultra.feature({
-  base: { padding: '14px' },
+  base: {
+    padding: '14px'
+  },
   mutations: {
-    tiny: { padding: '16px' },
-    small: { padding: '16px' },
-    medium: { padding: '16px' },
-    big: { padding: '16px' },
+    tiny: {
+      padding: '16px'
+    },
+    small: {
+      padding: '16px'
+    },
+    medium: {
+      padding: '16px'
+    },
+    big: {
+      padding: '16px'
+    },
   },
 });
 
@@ -80,14 +90,14 @@ const fonts = ultra.feature({
   media: {
     mobile: {
       rule: 'max-device-width: 1224px',
-      in: 'primary',
-      out: 'mono',
+      inside: 'primary',
+      outside: 'mono',
     }
   },
   combos: {
     deactivate: ({ deactivate }) => ({
-      active: !deactivate,
-      mono: deactivate,
+      mutations: deactivate ? 'mono' : 'active',
+      media: deactivate && 'mobile',
     }),
   },
 });
@@ -111,6 +121,7 @@ const StyledComponent = ultra.compose({
     fonts.use({
       mutations: 'primary,mono',
       combos: 'deactivate',
+      media: 'mobile',
     }),
   ],
   extra: {
@@ -243,8 +254,8 @@ const fonts = ultra.feature({
   },
   combos: {
     deactivate: ({ deactivate }) => ({
-      active: !deactivate,
-      mono: deactivate,
+      mutations: deactivate ? 'mono' : 'active',
+      media: deactivate && 'mobile',
     }),
   },
 });
