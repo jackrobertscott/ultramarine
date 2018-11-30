@@ -168,7 +168,7 @@ const fonts = ultra({
 
 Properties:
 
-- `[cssProperty]` [string]: add multiple css properties which are in camelCase as opposed to kebab-case (which is what CSS uses).
+- `base[cssProperty]` [string]: add multiple css properties which are in camelCase as opposed to kebab-case (which is what CSS uses).
 
 #### `config.mutations`
 
@@ -206,7 +206,7 @@ const fonts = ultra({
 
 Properties:
 
-- `[mutationName][cssProperty]` [string]: similar to the `base` property, name your mutations and then provide them CSS variables.
+- `mutations[mutationName][cssProperty]` [string]: similar to the `base` property, name your mutations and then provide them CSS variables.
 
 #### `config.combos`
 
@@ -249,7 +249,7 @@ const fonts = ultra({
 
 Properties:
 
-- `[comboName]` [func]: a function which recieves props as the first argument and should return a set of mutation names with boolean values relating to if those mutations should be on or off.
+- `combos[comboName]` [func]: a function which recieves props as the first argument and should return a set of mutation names with boolean values relating to if those mutations should be on or off.
 
 ### Elements
 
@@ -339,7 +339,7 @@ const StyleComponent = compose({
 
 Properties:
 
-- `[cssProperty]` [string]: add multiple css properties which are in camelCase as opposed to kebab-case (which is what CSS uses).
+- `extra[cssProperty]` [string]: add multiple css properties which are in camelCase as opposed to kebab-case (which is what CSS uses).
 
 ### Usage
 
