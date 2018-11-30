@@ -77,6 +77,13 @@ const fonts = ultra.feature({
       color: 'blue',
     },
   },
+  media: {
+    mobile: {
+      rule: 'max-device-width: 1224px',
+      in: 'primary',
+      out: 'mono',
+    }
+  },
   combos: {
     deactivate: ({ deactivate }) => ({
       active: !deactivate,
