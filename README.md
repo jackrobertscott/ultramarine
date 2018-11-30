@@ -19,9 +19,9 @@ yarn add ultramarine
 Then import the helper classes where needed.
 
 ```js
-import { ultra } from 'ultramarine';
+import ultra from 'ultramarine';
 
-const fonts = ultra({
+const fonts = ultra.feature({
   // code...
 });
 ```
@@ -40,12 +40,12 @@ Considerations in design:
 - Actions are methods which can map component `props` onto mutations and styles.
 
 ```js
-import { ultra } from 'ultramarine';
+import ultra from 'ultramarine';
 
 /**
  * Create a group of CSS properties and add some potential mutations.
  */
-const paddings = ultra({
+const paddings = ultra.feature({
   base: { padding: '14px' },
   mutations: {
     tiny: { padding: '16px' },
@@ -58,7 +58,7 @@ const paddings = ultra({
 /**
  * Groups of multiple properties can be created as well.
  */
-const fonts = ultra({
+const fonts = ultra.feature({
   base: {
     lineHeight: '1.15',
     fontFamily: 'inherit',
@@ -90,24 +90,20 @@ Import the themes and use them to construct new components.
 
 ```js
 import React from 'react';
-import { compose } from 'ultramarine';
+import ultra from 'ultramarine';
 import { paddings, fonts } from '../themes';
 import config from '../config';
 
 /**
  * Create a styled React component with your themes.
  */
-const StyledComponent = compose({
+const StyledComponent = ultra.compose({
   as: 'div',
   theme: [
     paddings,
-    fonts.add({
-      mutations: {
-        primary: config.compressed ? true : false,
-      },
-      combos: {
-        deactivate: true,
-      },
+    fonts.use({
+      mutations: 'primary,mono',
+      combos: 'deactivate',
     }),
   ],
   extra: {
@@ -135,7 +131,7 @@ const HelloWorld = ({ active }) => (
 Each theme is configured with a `config` object:
 
 ```js
-const theme = ultra(config);
+const theme = ultra.feature(config);
 ```
 
 This config object will contain all the information required by the theme.
@@ -148,7 +144,7 @@ This config object will contain all the information required by the theme.
 A group of base styles which will applied when this theme is used.
 
 ```js
-const fonts = ultra({
+const fonts = ultra.feature({
   base: {
     // styles...
   },
@@ -158,7 +154,7 @@ const fonts = ultra({
 Example:
 
 ```js
-const fonts = ultra({
+const fonts = ultra.feature({
   base: {
     fontSize: '14px',
     lineHeight: '1.5em',
@@ -178,7 +174,7 @@ Properties:
 A set of mutations to the base CSS styles which are applied only when they are needed.
 
 ```js
-const fonts = ultra({
+const fonts = ultra.feature({
   mutations: {
     // code...
   },
@@ -188,7 +184,7 @@ const fonts = ultra({
 Example:
 
 ```js
-const fonts = ultra({
+const fonts = ultra.feature({
   mutations: {
     primary: {
       fontSize: '20px',
@@ -216,7 +212,7 @@ Properties:
 A set of methods which can take React element props and combine them with mutations to turn those mutations on and off.
 
 ```js
-const fonts = ultra({
+const fonts = ultra.feature({
   combos: {
     // code...
   },
@@ -226,7 +222,7 @@ const fonts = ultra({
 Example:
 
 ```js
-const fonts = ultra({
+const fonts = ultra.feature({
   base: {
     color: 'black',
   },
@@ -256,7 +252,7 @@ Properties:
 To use our themes, we can **compose** them into a React element.
 
 ```js
-const StyledComponent = compose(composeConfig);
+const StyledComponent = ultra.compose(composeConfig);
 ```
 
 Notice the difference between `ultra` and `compose` which both have seperate functions.
@@ -269,7 +265,7 @@ Notice the difference between `ultra` and `compose` which both have seperate fun
 This will be the type of node that will be used to apply the styles to.
 
 ```js
-const StyledComponent = compose({
+const StyledComponent = ultra.compose({
   as: 'div',
 });
 ```
@@ -282,7 +278,7 @@ const StyledComponent = compose({
 This is an array of the themes which will be used to compose the visuals of the component.
 
 ```js
-const StyledComponent = compose({
+const StyledComponent = ultra.compose({
   theme: [
     // themes...
   ],
@@ -292,24 +288,20 @@ const StyledComponent = compose({
 Example:
 
 ```js
-const StyledComponent = compose({
+const StyledComponent = ultra.compose({
   theme: [
     paddings,
-    fonts.add({
-      mutations: {
-        primary: config.compressed ? true : false,
-      },
-      combos: {
-        deactivate: true,
-      },
+    fonts.use({
+      mutations: 'primary,mono',
+      combos: 'deactivate',
     }),
   ],
 });
 ```
 
-As you can see, the entries to the array can be just the theme itself (e.g. `paddings`) or it can specify the mutations and combos you wish to use from the theme (e.g. `fonts.add({})`).
+As you can see, the entries to the array can be just the theme itself (e.g. `paddings`) or it can specify the mutations and combos you wish to use from the theme (e.g. `fonts.use({})`).
 
-**Note:** the `add` method accepts `mutations` and `combos` as properties. These properties should be objects which specify the mutation or combo to use and a boolean value of wether to include them or not (see the example).
+**Note:** the `use` method accepts `mutations` and `combos` as properties. These properties should be objects which specify the mutation or combo to use and a boolean value of wether to include them or not (see the example).
 
 #### `composeConfig.extra`
 
@@ -319,7 +311,7 @@ As you can see, the entries to the array can be just the theme itself (e.g. `pad
 This is a group of CSS properties which are can be used to add extra styling to the component when the themes are not enough.
 
 ```js
-const StyleComponent = compose({
+const StyleComponent = ultra.compose({
   extra: {
     // css...
   },
@@ -329,7 +321,7 @@ const StyleComponent = compose({
 Example:
 
 ```js
-const StyleComponent = compose({
+const StyleComponent = ultra.compose({
   extra: {
     backgroundColor: 'green',
     boxShadow: '0 3px 5px rgba(0, 0, 0, 0.3)',
@@ -346,13 +338,11 @@ Properties:
 To use the themes, simply use the component that is created by the `compose` method in your normal React code.
 
 ```js
-const Wrap = compose({
+const Wrap = ultra.compose({
   as: 'div',
   theme: [
-    fonts.add({
-      combos: {
-        deactivate: true,
-      },
+    fonts.use({
+      combos: 'deactivate',
     }),
   ]
 });
@@ -386,4 +376,4 @@ const HelloWorld = ({ isActive }) => (
 );
 ```
 
-You can see the `mutations` and `combos` properties on the element should correspond to the properties in the `theme.add` method (as shown in above docs).
+You can see the `mutations` and `combos` properties on the element should correspond to the properties in the `theme.use` method (as shown in above docs).
