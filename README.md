@@ -19,9 +19,9 @@ yarn add ultramarine
 Then import the helper classes where needed.
 
 ```js
-import { Theme } from 'ultramarine';
+import { ultra } from 'ultramarine';
 
-const theme = Theme.create({
+const fonts = ultra({
   // code...
 });
 ```
@@ -40,12 +40,12 @@ Considerations in design:
 - Actions are methods which can map component `props` onto mutations and styles.
 
 ```js
-import { Theme } from 'lumbridge';
+import { ultra } from 'ultramarine';
 
 /**
  * Create a group of CSS properties and add some potential mutations.
  */
-const paddings = Theme.create({
+const paddings = ultra({
   base: { padding: '14px' },
   mutations: {
     tiny: { padding: '16px' },
@@ -58,7 +58,7 @@ const paddings = Theme.create({
 /**
  * Groups of multiple properties can be created as well.
  */
-const fonts = Theme.create({
+const fonts = ultra({
   base: {
     lineHeight: '1.15',
     fontFamily: 'inherit',
@@ -90,14 +90,14 @@ Import the themes and use them to construct new components.
 
 ```js
 import React from 'react';
-import { Theme } from 'lumbridge';
+import { compose } from 'ultramarine';
 import { paddings, fonts } from '../themes';
 import config from '../config';
 
 /**
  * Create a styled React component with your themes.
  */
-const StyledComponent = Theme.compose({
+const StyledComponent = compose({
   as: 'div',
   theme: [
     paddings,
@@ -135,7 +135,7 @@ const HelloWorld = ({ active }) => (
 Each theme is configured with a `config` object:
 
 ```js
-const theme = Theme.create(config);
+const theme = ultra(config);
 ```
 
 This config object will contain all the information required by the theme.
@@ -148,7 +148,7 @@ This config object will contain all the information required by the theme.
 A group of base styles which will applied when this theme is used.
 
 ```js
-const fonts = Theme.create({
+const fonts = ultra({
   base: {
     // styles...
   },
@@ -158,7 +158,7 @@ const fonts = Theme.create({
 Example:
 
 ```js
-const fonts = Theme.create({
+const fonts = ultra({
   base: {
     fontSize: '14px',
     lineHeight: '1.5em',
@@ -178,7 +178,7 @@ Properties:
 A set of mutations to the base CSS styles which are applied only when they are needed.
 
 ```js
-const fonts = Theme.create({
+const fonts = ultra({
   mutations: {
     // code...
   },
@@ -188,7 +188,7 @@ const fonts = Theme.create({
 Example:
 
 ```js
-const fonts = Theme.create({
+const fonts = ultra({
   mutations: {
     primary: {
       fontSize: '20px',
@@ -216,7 +216,7 @@ Properties:
 A set of methods which can take React element props and combine them with mutations to turn those mutations on and off.
 
 ```js
-const fonts = Theme.create({
+const fonts = ultra({
   combos: {
     // code...
   },
@@ -226,7 +226,7 @@ const fonts = Theme.create({
 Example:
 
 ```js
-const fonts = Theme.create({
+const fonts = ultra({
   base: {
     color: 'black',
   },
@@ -256,10 +256,10 @@ Properties:
 To use our themes, we can **compose** them into a React element.
 
 ```js
-const StyledComponent = Theme.compose(composeConfig);
+const StyledComponent = compose(composeConfig);
 ```
 
-Notice the difference between `Theme.create` and `Theme.compose` which both have seperate functions.
+Notice the difference between `ultra` and `compose` which both have seperate functions.
 
 #### `composeConfig.as`
 
@@ -269,7 +269,7 @@ Notice the difference between `Theme.create` and `Theme.compose` which both have
 This will be the type of node that will be used to apply the styles to.
 
 ```js
-const StyledComponent = Theme.compose({
+const StyledComponent = compose({
   as: 'div',
 });
 ```
@@ -282,7 +282,7 @@ const StyledComponent = Theme.compose({
 This is an array of the themes which will be used to compose the visuals of the component.
 
 ```js
-const StyledComponent = Theme.compose({
+const StyledComponent = compose({
   theme: [
     // themes...
   ],
@@ -292,7 +292,7 @@ const StyledComponent = Theme.compose({
 Example:
 
 ```js
-const StyledComponent = Theme.compose({
+const StyledComponent = compose({
   theme: [
     paddings,
     fonts.add({
@@ -319,7 +319,7 @@ As you can see, the entries to the array can be just the theme itself (e.g. `pad
 This is a group of CSS properties which are can be used to add extra styling to the component when the themes are not enough.
 
 ```js
-const StyleComponent = Theme.compose({
+const StyleComponent = compose({
   extra: {
     // css...
   },
@@ -329,7 +329,7 @@ const StyleComponent = Theme.compose({
 Example:
 
 ```js
-const StyleComponent = Theme.compose({
+const StyleComponent = compose({
   extra: {
     backgroundColor: 'green',
     boxShadow: '0 3px 5px rgba(0, 0, 0, 0.3)',
@@ -343,10 +343,10 @@ Properties:
 
 ### Usage
 
-To use the themes, simply use the component that is created by the `Theme.compose` method in your normal React code.
+To use the themes, simply use the component that is created by the `compose` method in your normal React code.
 
 ```js
-const Wrap = Theme.compose({
+const Wrap = compose({
   as: 'div',
   theme: [
     fonts.add({
