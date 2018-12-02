@@ -36,31 +36,31 @@ Considerations in design:
 - Write your styles as JavaScript objects which makes code reuse and refactoring simple.
 - Default CSS is removed from all HTML elements so that you don't have to undo styles all the time.
 - Properties values can only be strings and numbers to promote good code design.
-- Mutations can be created to alter few of the properties and provides flexibility with styles.
-- Actions are methods which can map component `props` onto mutations and styles.
+- States can be created to alter few of the properties and provides flexibility with styles.
+- Actions are methods which can map component `props` onto states and styles.
 
 ```js
 import ultra from 'ultramarine';
 
 /**
- * Create a group of CSS properties and add some potential mutations.
+ * Create a group of CSS properties and add some potential states.
  */
 const paddings = ultra.feature({
   base: {
     padding: '14px'
   },
-  mutations: {
+  states: {
     tiny: {
-      padding: '16px'
+      padding: '6px'
     },
     small: {
-      padding: '16px'
+      padding: '10px'
     },
     medium: {
       padding: '16px'
     },
     big: {
-      padding: '16px'
+      padding: '26px'
     },
   },
 });
@@ -75,7 +75,7 @@ const fonts = ultra.feature({
     fontSize: '100%',
     fontWeight: 'normal',
   },
-  mutations: {
+  states: {
     primary: {
       fontSize: '20px',
       fontWeight: 'bold',
@@ -86,18 +86,15 @@ const fonts = ultra.feature({
     active: {
       color: 'blue',
     },
-  },
-  media: {
     mobile: {
-      rule: 'max-device-width: 1224px',
-      inside: 'primary',
-      outside: 'mono',
+      '@media (min-width: 1024px)': {
+        width: 200
+      }
     }
   },
   combos: {
     deactivate: ({ deactivate }) => ({
-      mutations: deactivate ? 'mono' : 'active',
-      media: deactivate && 'mobile',
+      states: deactivate ? 'mono' : 'active',
     }),
   },
 });
@@ -119,9 +116,8 @@ const StyledComponent = ultra.compose({
   theme: [
     paddings,
     fonts.use({
-      mutations: 'primary,mono',
+      states: 'primary,mono',
       combos: 'deactivate',
-      media: 'mobile',
     }),
   ],
   extra: {
@@ -135,7 +131,7 @@ const StyledComponent = ultra.compose({
  */
 const HelloWorld = ({ active }) => (
   <StyledComponent active={active}>
-    <fonts.Instance as="span" mutations={{ mono: true }}>
+    <fonts.Instance as="span" states={{ mono: true }}>
       Hello world!
     </fonts.Instance>
   </StyledComponent>
@@ -184,16 +180,16 @@ Properties:
 
 - `base[cssProperty]` [string]: add multiple css properties which are in camelCase as opposed to kebab-case (which is what CSS uses).
 
-#### `config.mutations`
+#### `config.states`
 
 - Type: `object`
 - Required: `false`
 
-A set of mutations to the base CSS styles which are applied only when they are needed.
+A set of states to the base CSS styles which are applied only when they are needed.
 
 ```js
 const fonts = ultra.feature({
-  mutations: {
+  states: {
     // code...
   },
 });
@@ -203,7 +199,7 @@ Example:
 
 ```js
 const fonts = ultra.feature({
-  mutations: {
+  states: {
     primary: {
       fontSize: '20px',
       fontWeight: 'bold',
@@ -220,14 +216,14 @@ const fonts = ultra.feature({
 
 Properties:
 
-- `mutations[mutationName][cssProperty]` [string]: similar to the `base` property, name your mutations and then provide them CSS variables.
+- `states[mutationName][cssProperty]` [string]: similar to the `base` property, name your states and then provide them CSS variables.
 
 #### `config.combos`
 
 - Type: `object`
 - Required: `false`
 
-A set of methods which can take React element props and combine them with mutations to turn those mutations on and off.
+A set of methods which can take React element props and combine them with states to turn those states on and off.
 
 ```js
 const fonts = ultra.feature({
@@ -244,7 +240,7 @@ const fonts = ultra.feature({
   base: {
     color: 'black',
   },
-  mutations: {
+  states: {
     mono: {
       fontFamily: 'monospace',
     },
@@ -254,8 +250,7 @@ const fonts = ultra.feature({
   },
   combos: {
     deactivate: ({ deactivate }) => ({
-      mutations: deactivate ? 'mono' : 'active',
-      media: deactivate && 'mobile',
+      states: deactivate ? 'mono' : 'active',
     }),
   },
 });
@@ -263,7 +258,7 @@ const fonts = ultra.feature({
 
 Properties:
 
-- `combos[comboName]` [func]: a function which recieves props as the first argument and should return a set of mutation names with boolean values relating to if those mutations should be on or off.
+- `combos[comboName]` [func]: a function which recieves props as the first argument and should return a set of mutation names with boolean values relating to if those states should be on or off.
 
 ### Elements
 
@@ -310,16 +305,16 @@ const StyledComponent = ultra.compose({
   theme: [
     paddings,
     fonts.use({
-      mutations: 'primary,mono',
+      states: 'primary,mono',
       combos: 'deactivate',
     }),
   ],
 });
 ```
 
-As you can see, the entries to the array can be just the theme itself (e.g. `paddings`) or it can specify the mutations and combos you wish to use from the theme (e.g. `fonts.use({})`).
+As you can see, the entries to the array can be just the theme itself (e.g. `paddings`) or it can specify the states and combos you wish to use from the theme (e.g. `fonts.use({})`).
 
-**Note:** the `use` method accepts `mutations` and `combos` as properties. These properties should be objects which specify the mutation or combo to use and a boolean value of wether to include them or not (see the example).
+**Note:** the `use` method accepts `states` and `combos` as properties. These properties should be objects which specify the mutation or combo to use and a boolean value of wether to include them or not (see the example).
 
 #### `composeConfig.extra`
 
@@ -384,7 +379,7 @@ You can quickly create an insance of a theme as a react element with the `theme.
 const HelloWorld = ({ isActive }) => (
   <div>
     <fonts.Instance
-      mutations={{ mono: true }}
+      states={{ mono: true }}
       combos={{ active: true }}
       deactivate={!isActive}
     >
@@ -394,4 +389,4 @@ const HelloWorld = ({ isActive }) => (
 );
 ```
 
-You can see the `mutations` and `combos` properties on the element should correspond to the properties in the `theme.use` method (as shown in above docs).
+You can see the `states` and `combos` properties on the element should correspond to the properties in the `theme.use` method (as shown in above docs).
