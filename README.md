@@ -38,9 +38,9 @@ The coolest feature by far (or at least we think so) is that all of the in-brows
 Instead, you're starting with a clean slate every time!
 
 ```ts
-import { Creation } from 'ultramarine';
+import Ultra from 'ultramarine';
 
-const Button = new Creation({
+const Button = Ultra.create({
   elem: 'div',
   styles: ({ active }) => ({
     backgroundColor: active ? 'green' : 'yellow',
@@ -95,9 +95,9 @@ How clean is that... I just want to kiss the computer sometimes 😍
 Each time you would like to create a new element and start styling it, import the creation class and add you styles in the `styles` property.
 
 ```ts
-import { Creation } from 'ultramarine';
+import Ultra from 'ultramarine';
 
-const Button = new Creation({
+const Button = Ultra.create({
   elem: 'div',
   styles: ({ active }) => ({
     backgroundColor: active ? 'green' : 'yellow',
