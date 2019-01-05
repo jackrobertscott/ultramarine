@@ -18,375 +18,134 @@ yarn add ultramarine
 
 Then import the helper classes where needed.
 
-```js
-import ultra from 'ultramarine';
-
-const fonts = ultra.feature({
-  // code...
-});
+```ts
+import { Creation } from 'ultramarine';
 ```
 
 ## Overview
 
-A new approach to styling components, taking a more functional approach.
+We took a new, more functional approach to styling components.
 
 Considerations in design:
 
-- Arrange your styles in groups of functional properties and use those groups to compose component styles.
-- Write your styles as JavaScript objects which makes code reuse and refactoring simple.
-- Default CSS is removed from all HTML elements so that you don't have to undo styles all the time.
-- Properties values can only be strings and numbers to promote good code design.
-- States can be created to alter few of the properties and provides flexibility with styles.
-- Actions are methods which can map component `props` onto states and styles.
+- Styles are arranged per-component, which is similar to the BEM system.
+- We use CSS-in-JS so that code reuse can be performed easily with variables between files.
+- Props which are placed on the React component can be accessed easily in function set on the `styles` property.
+- The default element can be easily changed between versions.
 
-```js
-import ultra from 'ultramarine';
+The coolest feature by far (or at least we think so) is that all of the in-browser default styles - which are added to elements such as inputs - are reset to nothing. That way, no matter which element that you use (e.g. `button`, `input`, `div`), they will all initially look the same and have the same styles. You will need to add styles to make them look good. That's good because it means you never have to *remove* the bloody default styles each time you style an element.
 
-/**
- * Create a group of CSS properties and add some potential states.
- */
-const paddings = ultra.feature({
-  base: {
-    padding: '14px'
-  },
-  states: {
-    tiny: {
-      padding: '6px'
-    },
-    small: {
-      padding: '10px'
-    },
-    medium: {
-      padding: '16px'
-    },
-    big: {
-      padding: '26px'
-    },
-  },
+Instead, you're starting with a clean slate every time!
+
+```ts
+import { Creation } from 'ultramarine';
+
+const Button = new Creation({
+	elem: 'div',
+	styles: ({ active }) => ({
+		backgroundColor: active ? 'green' : 'yellow',
+		color: 'yellow',
+	}),
 });
 
-/**
- * Groups of multiple properties can be created as well.
- */
-const fonts = ultra.feature({
-  base: {
-    lineHeight: '1.15',
-    fontFamily: 'inherit',
-    fontSize: '100%',
-    fontWeight: 'normal',
-  },
-  states: {
-    primary: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-    },
-    mono: {
-      fontFamily: 'monospace',
-    },
-    active: {
-      color: 'blue',
-    },
-    mobile: {
-      '@media (min-width: 1024px)': {
-        width: 200
-      }
-    }
-  },
-  combos: {
-    deactivate: ({ deactivate }) => ({
-      states: deactivate ? 'mono' : 'active',
-    }),
-  },
+Button.version({
+	name: 'danger',
+	elem: 'button',
+	styles: () => ({
+		backgroundColor: 'red',
+		hover: {
+			color: 'lightRed',
+		},
+		'&:nth-child(3n)': {
+			color: 'darkRed',
+		},
+	}),
 });
+
+export default Button;
 ```
 
-Import the themes and use them to construct new components.
+Then you just need to import that component and start using it.
 
-```js
-import React from 'react';
-import ultra from 'ultramarine';
-import { paddings, fonts } from '../themes';
-import config from '../config';
+```ts
+import React, { FunctionComponent } from 'react';
+import Button from '../creations/Button';
 
-/**
- * Create a styled React component with your themes.
- */
-const StyledComponent = ultra.compose({
-  as: 'div',
-  theme: [
-    paddings,
-    fonts.use({
-      states: 'primary,mono',
-      combos: 'deactivate',
-    }),
-  ],
-  extra: {
-    backgroundColor: 'green',
-  },
-});
+interface IHelloWorldProps {
+  active: boolean;
+}
 
-/**
- * Use the styled react component like normal, or get create an element
- * directly from the theme.
- */
-const HelloWorld = ({ active }) => (
-  <StyledComponent active={active}>
-    <fonts.Instance as="span" states={{ mono: true }}>
-      Hello world!
-    </fonts.Instance>
-  </StyledComponent>
+const HelloWorld: FunctionComponent<IHelloWorldProps> = ({ active }) => (
+  <Card>
+    <Layout version="rows">
+      <Button version="danger otherVersion" active={active} />
+    </Layout>
+  </Card>
 );
+
+export default HelloWorld;
 ```
+
+How clean is that... I just want to kiss the computer sometimes 😍
 
 ## API
 
-### Config
+### `const Button = new Creation()`
 
-Each theme is configured with a `config` object:
+Each time you would like to create a new element and start styling it, import the creation class and add you styles in the `styles` property.
 
-```js
-const theme = ultra.feature(config);
+```ts
+import { Creation } from 'ultramarine';
+
+const Button = new Creation({
+	elem: 'div',
+	styles: ({ active }) => ({
+		backgroundColor: active ? 'green' : 'yellow',
+		color: 'yellow',
+	}),
+});
+
+export default Button;
 ```
 
-This config object will contain all the information required by the theme.
+### `Button.version()`
 
-#### `config.base`
+When you want to create a new version of a creation component, add in the styles and give it a name you can reference in React.
 
-- Type: `object`
-- Required: `false`
-
-A group of base styles which will applied when this theme is used.
-
-```js
-const fonts = ultra.feature({
-  base: {
-    // styles...
-  },
+```ts
+Button.version({
+	name: 'danger',
+	elem: 'button',
+	styles: () => ({
+		backgroundColor: 'red',
+		hover: {
+			color: 'lightRed',
+		},
+		'&:nth-child(3n)': {
+			color: 'darkRed',
+		},
+	}),
 });
 ```
 
-Example:
+### `<Button />`
 
-```js
-const fonts = ultra.feature({
-  base: {
-    fontSize: '14px',
-    lineHeight: '1.5em',
-  },
-});
+To use the button, you simple add it into the dom.
+
 ```
+import Button from '../creations/Button';
 
-Properties:
+interface IHelloWorldProps {
+  active: boolean;
+}
 
-- `base[cssProperty]` [string]: add multiple css properties which are in camelCase as opposed to kebab-case (which is what CSS uses).
-
-#### `config.states`
-
-- Type: `object`
-- Required: `false`
-
-A set of states to the base CSS styles which are applied only when they are needed.
-
-```js
-const fonts = ultra.feature({
-  states: {
-    // code...
-  },
-});
-```
-
-Example:
-
-```js
-const fonts = ultra.feature({
-  states: {
-    primary: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-    },
-    mono: {
-      fontFamily: 'monospace',
-    },
-    active: {
-      color: 'blue',
-    },
-  },
-});
-```
-
-Properties:
-
-- `states[mutationName][cssProperty]` [string]: similar to the `base` property, name your states and then provide them CSS variables.
-
-#### `config.combos`
-
-- Type: `object`
-- Required: `false`
-
-A set of methods which can take React element props and combine them with states to turn those states on and off.
-
-```js
-const fonts = ultra.feature({
-  combos: {
-    // code...
-  },
-});
-```
-
-Example:
-
-```js
-const fonts = ultra.feature({
-  base: {
-    color: 'black',
-  },
-  states: {
-    mono: {
-      fontFamily: 'monospace',
-    },
-    active: {
-      color: 'blue',
-    },
-  },
-  combos: {
-    deactivate: ({ deactivate }) => ({
-      states: deactivate ? 'mono' : 'active',
-    }),
-  },
-});
-```
-
-Properties:
-
-- `combos[comboName]` [func]: a function which recieves props as the first argument and should return a set of mutation names with boolean values relating to if those states should be on or off.
-
-### Elements
-
-To use our themes, we can **compose** them into a React element.
-
-```js
-const StyledComponent = ultra.compose(composeConfig);
-```
-
-Notice the difference between `ultra` and `compose` which both have seperate functions.
-
-#### `composeConfig.as`
-
-- Type: `string` | `node`
-- Required: `true`
-
-This will be the type of node that will be used to apply the styles to.
-
-```js
-const StyledComponent = ultra.compose({
-  as: 'div',
-});
-```
-
-#### `composeConfig.theme`
-
-- Type: `array`
-- Required: `true`
-
-This is an array of the themes which will be used to compose the visuals of the component.
-
-```js
-const StyledComponent = ultra.compose({
-  theme: [
-    // themes...
-  ],
-});
-```
-
-Example:
-
-```js
-const StyledComponent = ultra.compose({
-  theme: [
-    paddings,
-    fonts.use({
-      states: 'primary,mono',
-      combos: 'deactivate',
-    }),
-  ],
-});
-```
-
-As you can see, the entries to the array can be just the theme itself (e.g. `paddings`) or it can specify the states and combos you wish to use from the theme (e.g. `fonts.use({})`).
-
-**Note:** the `use` method accepts `states` and `combos` as properties. These properties should be objects which specify the mutation or combo to use and a boolean value of wether to include them or not (see the example).
-
-#### `composeConfig.extra`
-
-- Type: `object`
-- Required: `false`
-
-This is a group of CSS properties which are can be used to add extra styling to the component when the themes are not enough.
-
-```js
-const StyleComponent = ultra.compose({
-  extra: {
-    // css...
-  },
-});
-```
-
-Example:
-
-```js
-const StyleComponent = ultra.compose({
-  extra: {
-    backgroundColor: 'green',
-    boxShadow: '0 3px 5px rgba(0, 0, 0, 0.3)',
-  },
-});
-```
-
-Properties:
-
-- `extra[cssProperty]` [string]: add multiple css properties which are in camelCase as opposed to kebab-case (which is what CSS uses).
-
-### Usage
-
-To use the themes, simply use the component that is created by the `compose` method in your normal React code.
-
-```js
-const Wrap = ultra.compose({
-  as: 'div',
-  theme: [
-    fonts.use({
-      combos: 'deactivate',
-    }),
-  ]
-});
-
-const HelloWorld = ({ isActive }) => (
-  <Wrap deactivate={!isActive}>
-    <span>Hello world!</span>
-  <Wrap>
+const HelloWorld: FunctionComponent<IHelloWorldProps> = ({ active }) => (
+  <Card>
+    <Button version="danger otherVersion" active={active} />
+  </Card>
 );
 ```
 
-In the above example, the `deactivate` property which is set on the `Wrap` element can be used by any combos which were added to the theme.
+## Authors
 
-#### `theme.Instance`
-
-- Type: `node`
-
-You can quickly create an insance of a theme as a react element with the `theme.Instance` property.
-
-```js
-const HelloWorld = ({ isActive }) => (
-  <div>
-    <fonts.Instance
-      states={{ mono: true }}
-      combos={{ active: true }}
-      deactivate={!isActive}
-    >
-      Hello world!
-    </fonts.Instance>
-  </div>
-);
-```
-
-You can see the `states` and `combos` properties on the element should correspond to the properties in the `theme.use` method (as shown in above docs).
+- Jack Scott [@jacrobsco](https://twitter.com/jacrobsco) - I tweet about startups and coding.
