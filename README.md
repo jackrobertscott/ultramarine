@@ -40,27 +40,25 @@ Instead, you're starting with a clean slate every time!
 ```ts
 import Ultra from 'ultramarine';
 
-const Button = Ultra.create({
-  elem: 'div',
-  styles: ({ active }) => ({
-    backgroundColor: active ? 'green' : 'yellow',
-    color: 'yellow',
-  }),
-});
+const Button = Ultra.create('div', ({ active }) => ({
+  backgroundColor: active ? 'green' : 'yellow',
+  color: 'yellow',
+  padding: '1em',
+}));
 
-Button.version({
-  name: 'danger',
-  elem: 'button',
-  styles: () => ({
-    backgroundColor: 'red',
-    hover: {
-      color: 'lightRed',
-    },
-    '&:nth-child(3n)': {
-      color: 'darkRed',
-    },
-  }),
-});
+Button.version('danger:button', () => ({
+  backgroundColor: 'red',
+  hover: {
+    color: 'lightRed',
+  },
+  '&:nth-child(3n)': {
+    color: 'darkRed',
+  },
+}));
+
+Button.version('big', () => ({
+  padding: '3em',
+}));
 
 export default Button;
 ```
@@ -69,7 +67,7 @@ Then you just need to import that component and start using it.
 
 ```ts
 import React, { FunctionComponent } from 'react';
-import Button from '../creations/Button';
+import { Button, Layout } from '../creations';
 
 interface IHelloWorldProps {
   active: boolean;
@@ -78,7 +76,7 @@ interface IHelloWorldProps {
 const HelloWorld: FunctionComponent<IHelloWorldProps> = ({ active }) => (
   <Card>
     <Layout version="rows">
-      <Button version="danger otherVersion" active={active} />
+      <Button version="danger big" active={active} />
     </Layout>
   </Card>
 );
@@ -97,13 +95,11 @@ Each time you would like to create a new element and start styling it, import th
 ```ts
 import Ultra from 'ultramarine';
 
-const Button = Ultra.create({
-  elem: 'div',
-  styles: ({ active }) => ({
-    backgroundColor: active ? 'green' : 'yellow',
-    color: 'yellow',
-  }),
-});
+const Button = Ultra.create('div', ({ active }) => ({
+  backgroundColor: active ? 'green' : 'yellow',
+  color: 'yellow',
+  padding: '1em',
+}));
 
 export default Button;
 ```
@@ -113,20 +109,18 @@ export default Button;
 When you want to create a new version of a creation component, add in the styles and give it a name you can reference in React.
 
 ```ts
-Button.version({
-  name: 'danger',
-  elem: 'button',
-  styles: () => ({
-    backgroundColor: 'red',
-    hover: {
-      color: 'lightRed',
-    },
-    '&:nth-child(3n)': {
-      color: 'darkRed',
-    },
-  }),
-});
+Button.version('danger:button', () => ({
+  backgroundColor: 'red',
+  hover: {
+    color: 'lightRed',
+  },
+  '&:nth-child(3n)': {
+    color: 'darkRed',
+  },
+}));
 ```
+
+The name of the version follows the pattern `name:element` so that you can easily change the element type if you desire. If you don't want to change the default element of the creation, then leave it out e.g. `Button.version('big')` vs `Button.version('big:a')`.
 
 ### `<Button />`
 
