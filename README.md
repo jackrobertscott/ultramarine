@@ -41,25 +41,25 @@ Instead, you're starting with a clean slate every time!
 import { Creation } from 'ultramarine';
 
 const Button = new Creation({
-	elem: 'div',
-	styles: ({ active }) => ({
-		backgroundColor: active ? 'green' : 'yellow',
-		color: 'yellow',
-	}),
+  elem: 'div',
+  styles: ({ active }) => ({
+    backgroundColor: active ? 'green' : 'yellow',
+    color: 'yellow',
+  }),
 });
 
 Button.version({
-	name: 'danger',
-	elem: 'button',
-	styles: () => ({
-		backgroundColor: 'red',
-		hover: {
-			color: 'lightRed',
-		},
-		'&:nth-child(3n)': {
-			color: 'darkRed',
-		},
-	}),
+  name: 'danger',
+  elem: 'button',
+  styles: () => ({
+    backgroundColor: 'red',
+    hover: {
+      color: 'lightRed',
+    },
+    '&:nth-child(3n)': {
+      color: 'darkRed',
+    },
+  }),
 });
 
 export default Button;
@@ -98,11 +98,11 @@ Each time you would like to create a new element and start styling it, import th
 import { Creation } from 'ultramarine';
 
 const Button = new Creation({
-	elem: 'div',
-	styles: ({ active }) => ({
-		backgroundColor: active ? 'green' : 'yellow',
-		color: 'yellow',
-	}),
+  elem: 'div',
+  styles: ({ active }) => ({
+    backgroundColor: active ? 'green' : 'yellow',
+    color: 'yellow',
+  }),
 });
 
 export default Button;
@@ -114,17 +114,17 @@ When you want to create a new version of a creation component, add in the styles
 
 ```ts
 Button.version({
-	name: 'danger',
-	elem: 'button',
-	styles: () => ({
-		backgroundColor: 'red',
-		hover: {
-			color: 'lightRed',
-		},
-		'&:nth-child(3n)': {
-			color: 'darkRed',
-		},
-	}),
+  name: 'danger',
+  elem: 'button',
+  styles: () => ({
+    backgroundColor: 'red',
+    hover: {
+      color: 'lightRed',
+    },
+    '&:nth-child(3n)': {
+      color: 'darkRed',
+    },
+  }),
 });
 ```
 
