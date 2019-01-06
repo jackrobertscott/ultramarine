@@ -1,3 +1,5 @@
-import feature from './modules/feature';
-import compose from './modules/compose';
-export default { feature, compose };
+import create from './modules/create';
+
+export default {
+  create,
+};
