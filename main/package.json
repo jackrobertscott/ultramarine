@@ -1,0 +1,50 @@
+{
+  "name": "ultramarine",
+  "version": "0.2.0",
+  "private": false,
+  "description": "Functional styling for React components.",
+  "author": {
+    "name": "Jack R. Scott",
+    "email": "jack.rob.scott@gmail.com"
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "source": "src/index.ts",
+  "files": [
+    "lib",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "mocha -r ts-node/register src/**/*.test.ts",
+    "prepublishOnly": "yarn run build",
+    "build": "yarn run clean && yarn run compile",
+    "clean": "rm -rf lib",
+    "compile": "tsc"
+  },
+  "dependencies": {
+    "@types/jss": "^9.5.7",
+    "@types/prop-types": "^15.5.6",
+    "@types/react": "^16.7.7",
+    "jss": "^10.0.0-alpha.7",
+    "jss-preset-default": "^10.0.0-alpha.7",
+    "prop-types": "^15.6.2",
+    "react": "^16.6.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.6"
+  },
+  "keywords": [
+    "css",
+    "react",
+    "style",
+    "styled",
+    "component",
+    "components"
+  ]
+}
