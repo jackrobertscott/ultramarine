@@ -1,0 +1,60 @@
+export type IStyler = (
+  props: any,
+) => {
+  [name: string]: string;
+};
+
+export interface IVersion {
+  name: string;
+  type?: string;
+  styler: IStyler;
+}
+
+export default class Creation {
+  private defaultType: string;
+  private defaultStyler: IStyler;
+  private versions: Map<string, IVersion>;
+
+  constructor(type: string, styler: IStyler) {
+    this.defaultType = type;
+    this.defaultStyler = styler;
+    this.versions = new Map();
+  }
+
+  /**
+   * Adds a new version to the creation. The meta string can
+   * include a type after a ":" character i.e. "exampleVersion:div".
+   */
+  public version(meta: string, styler: IStyler): Creation {
+    const [name, type] = meta.split(':');
+    this.versions.set(name, {
+      name,
+      type,
+      styler,
+    });
+    return this;
+  }
+
+  /**
+   * Take a property object and use it to generate the styles
+   * for the creation.
+   */
+  public render(props: any, versionName?: string) {
+    if (versionName && !this.versions.has(versionName)) {
+      const message = `The version "${versionName}" does not exist on the creation element.`;
+      throw new Error(message);
+    }
+    const baseStyles = this.defaultStyler(props || {});
+    const version = versionName ? this.versions.get(versionName) : undefined;
+    const versionStyles = version ? version.styler(props) : {};
+    const styles = Object.keys(versionStyles).reduce((css, property) => {
+      if (!css[property]) {
+        const message = `The property "${property}" does not exist on the base style group.`;
+        throw new Error(message);
+      }
+      css[property] = versionStyles[property];
+      return css;
+    }, baseStyles);
+    return styles;
+  }
+}

@@ -2,12 +2,7 @@ import * as React from 'react';
 import * as equal from 'fast-deep-equal';
 import { StyleSheet } from 'jss';
 import cssinjss from '../utils/cssinjs';
-
-export type ICSS = (
-  props: any,
-) => {
-  [name: string]: string;
-};
+import { IStyler } from './Creation';
 
 function renderCreation(type: string, props: any, className: string) {
   const classNames: string = props.className || '';
@@ -21,7 +16,7 @@ function renderCreation(type: string, props: any, className: string) {
   });
 }
 
-export default function create(type: string, styles: ICSS) {
+export default function create(type: string, styles: IStyler) {
   let appliedStyles: unknown;
   let appliedClassName: string;
   let appliedStyleSheet: StyleSheet;
