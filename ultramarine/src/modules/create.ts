@@ -27,7 +27,6 @@ export default function create(type: string, styles: ICSS) {
   let appliedStyleSheet: StyleSheet;
   return (...args: any[]) => {
     const [props] = args;
-    console.log(props);
     const createdStyles = styles(props);
     /**
      * Nothing changed in styles so we will just render
