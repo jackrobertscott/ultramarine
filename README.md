@@ -19,7 +19,7 @@ yarn add ultramarine
 Then import the helper classes where needed.
 
 ```ts
-import { Creation } from 'ultramarine';
+import Ultra from 'ultramarine';
 ```
 
 ## Overview
