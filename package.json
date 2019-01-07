@@ -4,7 +4,15 @@
     "ultramarine",
     "website"
   ],
+  "nohoist": [
+    "**/react-scripts",
+    "**/react-scripts/**"
+  ],
+  "scripts": {
+    "start": "concurrently \"cd ultramarine && yarn start\" \"cd website && yarn start\""
+  },
   "devDependencies": {
+    "concurrently": "^4.1.0",
     "prettier": "^1.15.2",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.16.0",

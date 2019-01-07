@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
-import Ultra from 'ultramarine';
-
-const Example = Ultra.create('div', () => ({}));
-
-console.log(Example);
+import Button from './creations/Button';
 
 const App: FunctionComponent<{}> = () => {
-  return <div>Hello world!</div>;
+  return (
+    <div>
+      <Button color="blue">Hello world!</Button>
+    </div>
+  );
 };
 
 export default App;
