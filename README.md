@@ -48,7 +48,7 @@ const Button = Ultra.create('div', ({ active }) => ({
 
 Button.version('danger', () => ({
   backgroundColor: 'red',
-  hover: {
+  '&:hover': {
     color: 'lightRed',
   },
   '&:nth-child(3n)': {
@@ -111,7 +111,7 @@ When you want to create a new version of a creation component, add in the styles
 ```ts
 Button.version('danger', () => ({
   backgroundColor: 'red',
-  hover: {
+  '&:hover': {
     color: 'lightRed',
   },
   '&:nth-child(3n)': {
