@@ -1,8 +1,6 @@
 import * as React from 'react';
-import * as equal from 'fast-deep-equal';
-import { StyleSheet } from 'jss';
-import cssinjss from '../utils/cssinjs';
 import Creation, { IStyler, IMeta } from './Creation';
+import Sheets from './Sheets';
 
 /**
  * Create a component with the appropriate class names attached.
@@ -29,13 +27,14 @@ export interface IRendererProps {
  * styles on the document.
  */
 export default function create(defaultType: string, styler: IStyler) {
+  const sheets = new Sheets();
   const creation = new Creation(defaultType, styler);
   return class Renderer extends React.Component<IRendererProps> {
     public static version = (name: string, versionStyler: IStyler) => {
       creation.version(name, versionStyler);
     };
     public context: IMeta & {
-      sheets?: StyleSheet;
+      id?: string;
       className?: string;
     };
     constructor(props: any) {
@@ -47,48 +46,21 @@ export default function create(defaultType: string, styler: IStyler) {
       };
     }
     public componentWillUnmount() {
-      if (this.context.sheets) {
-        this.context.sheets.detach();
+      if (this.context.id) {
+        /**
+         * This may cause errors if there are two elements that have the same
+         * styles and then one of them is unmounted:
+         *
+         * sheets.remove(this.context.id);
+         */
       }
     }
     public render() {
       const { version } = this.props;
       const { type, styles } = creation.stylize(this.props, version);
-      const { sheets, className } = this.attachStyles({ type, styles });
-      this.updateContext({ type, styles, sheets, className });
+      const { id, className } = sheets.add(styles);
+      this.updateContext({ type, styles, id, className });
       return renderCreation(type, this.props, className);
-    }
-    /**
-     * Remove an old stylesheet (if one is found) and then create a new
-     * style sheet.
-     */
-    public attachStyles({
-      type,
-      styles,
-    }: IMeta): { sheets: StyleSheet; className: string } {
-      if (
-        this.context.sheets &&
-        this.context.className &&
-        equal(styles, this.context.styles) &&
-        equal(type, this.context.type)
-      ) {
-        return {
-          sheets: this.context.sheets,
-          className: this.context.className,
-        };
-      }
-      if (this.context.sheets) {
-        this.context.sheets.detach();
-      }
-      const sheets = cssinjss
-        .createStyleSheet({
-          [type]: styles,
-        })
-        .attach();
-      return {
-        sheets,
-        className: sheets.classes[type],
-      };
     }
     /**
      * Patch the context of the item easily.

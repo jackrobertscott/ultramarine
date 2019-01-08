@@ -5,11 +5,15 @@ export default class App extends Component {
   public interval?: NodeJS.Timeout;
   public state = {
     color: 'green',
+    count: 0,
   };
   public componentDidMount() {
-    // this.interval = setInterval(() => {
-    //   this.setState({ color: this.state.color === 'green' ? 'blue' : 'green' });
-    // }, 4000);
+    this.interval = setInterval(() => {
+      this.setState({
+        color: this.state.color === 'green' ? 'blue' : 'green',
+        count: this.state.count + 1,
+      });
+    }, 4000);
   }
   public componentWillUnmount() {
     if (this.interval) {
@@ -20,6 +24,8 @@ export default class App extends Component {
     return (
       <div>
         <Button color={this.state.color}>Hello world!</Button>
+        {this.state.count < 1 && <Button color="green">Hello world!</Button>}
+        <Button color="green">Hello world!</Button>
         <Button version="danger">Hello world!</Button>
       </div>
     );

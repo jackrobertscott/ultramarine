@@ -19,13 +19,11 @@ export default class Creation {
   private defaultType: string;
   private defaultStyler: IStyler;
   private versions: Map<string, IVersion>;
-
   constructor(type: string, styler: IStyler) {
     this.defaultType = type;
     this.defaultStyler = styler;
     this.versions = new Map();
   }
-
   /**
    * Adds a new version to the creation. The meta string can
    * include a type after a ":" character i.e. "exampleVersion:div".
@@ -39,7 +37,6 @@ export default class Creation {
     });
     return this;
   }
-
   /**
    * Take a property object and use it to generate the styles
    * for the creation.
