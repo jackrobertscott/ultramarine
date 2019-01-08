@@ -58,7 +58,7 @@ Button.version('danger', () => ({
 
 Button.version('big', () => ({
   padding: '3em',
-}), CustomComponent);
+}));
 
 export default Button;
 ```
@@ -119,8 +119,6 @@ Button.version('danger', () => ({
   },
 }));
 ```
-
-If you wish to change the component for the specific version, add it as the 3rd parameter e.g. `Button.version('danger', () => ({}), CustomComponent)`.
 
 ### `<Button />`
 

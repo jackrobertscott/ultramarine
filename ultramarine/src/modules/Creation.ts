@@ -1,5 +1,5 @@
 export interface ICSS {
-  [property: string]: string | ICSS;
+  [property: string]: string | number | ICSS;
 }
 
 export type IType = any;
@@ -13,7 +13,6 @@ export type IStyler = (props: any) => ICSS;
 
 export interface IVersion {
   name: string;
-  type?: IType;
   styler: IStyler;
 }
 
@@ -30,11 +29,10 @@ export default class Creation {
    * Adds a new version to the creation. The meta string can
    * include a type after a ":" character i.e. "exampleVersion:div".
    */
-  public version(name: string, styler: IStyler, type?: IType): Creation {
+  public version(name: string, styler: IStyler): Creation {
     this.versions.set(name, {
       name,
       styler,
-      type,
     });
     return this;
   }
@@ -42,18 +40,33 @@ export default class Creation {
    * Take a property object and use it to generate the styles
    * for the creation.
    */
-  public stylize(props: any, versionName?: string): IMeta {
-    if (versionName && !this.versions.has(versionName)) {
-      const message = `The version "${versionName}" does not exist on the creation element.`;
-      throw new Error(message);
+  public stylize(props: any, versionNames?: string): IMeta {
+    if (versionNames) {
+      versionNames
+        .trim()
+        .split(' ')
+        .forEach(name => {
+          if (!this.versions.has(name)) {
+            const message = `The version "${name}" does not exist on the creation element.`;
+            throw new Error(message);
+          }
+        });
     }
+    const versionStyles = versionNames
+      ? versionNames
+          .trim()
+          .split(' ')
+          .map(name => this.versions.get(name))
+          .map(version => (version ? version.styler(props) : {}))
+          .reduce((accum, next) => ({ ...accum, ...next }), {})
+      : {};
+    const type = props.as || this.defaultType;
     const baseStyles = this.defaultStyler(props || {});
-    const version = versionName ? this.versions.get(versionName) : undefined;
-    const versionStyles = version ? version.styler(props) : {};
-    const type = props.as || (version && version.type) || this.defaultType;
     const styles = Object.keys(versionStyles).reduce((css, property) => {
       if (property in css === false) {
-        const message = `The property "${property}" of version "${versionName}" does not exist in the initial styles of the element.`;
+        const message = `The property "${property}" does not exist in the initial styles of the element: [${Object.keys(
+          baseStyles,
+        ).join(', ')}].`;
         throw new Error(message);
       }
       css[property] = versionStyles[property];

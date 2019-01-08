@@ -42,12 +42,8 @@ export default function create(defaultType: IType, styler: IStyler) {
   const sheets = new Sheets();
   const creation = new Creation(defaultType, styler);
   return class Renderer extends React.Component<IRendererProps> {
-    public static version = (
-      name: string,
-      versionStyler: IStyler,
-      type?: IType,
-    ) => {
-      creation.version(name, versionStyler, type);
+    public static version = (name: string, versionStyler: IStyler) => {
+      creation.version(name, versionStyler);
     };
     public context: IMeta & {
       id?: string;
