@@ -1,8 +1,13 @@
-export type IStyler = (
-  props: any,
-) => {
-  [name: string]: string;
-};
+export interface ICSS {
+  [property: string]: string | ICSS;
+}
+
+export interface IMeta {
+  styles: ICSS;
+  type: string;
+}
+
+export type IStyler = (props: any) => ICSS;
 
 export interface IVersion {
   name: string;
@@ -39,7 +44,7 @@ export default class Creation {
    * Take a property object and use it to generate the styles
    * for the creation.
    */
-  public stylize(props: any, versionName?: string) {
+  public stylize(props: any, versionName?: string): IMeta {
     if (versionName && !this.versions.has(versionName)) {
       const message = `The version "${versionName}" does not exist on the creation element.`;
       throw new Error(message);

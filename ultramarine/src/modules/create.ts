@@ -2,11 +2,7 @@ import * as React from 'react';
 import * as equal from 'fast-deep-equal';
 import { StyleSheet } from 'jss';
 import cssinjss from '../utils/cssinjs';
-import Creation, { IStyler } from './Creation';
-
-export type IRenderer = React.FunctionComponent<any> & {
-  version: (name: string, versionStyler: IStyler) => void;
-};
+import Creation, { IStyler, IMeta } from './Creation';
 
 /**
  * Create a component with the appropriate class names attached.
@@ -23,49 +19,85 @@ function renderCreation(type: string, props: any, className: string) {
   });
 }
 
+export interface IRendererProps {
+  version?: string;
+  [property: string]: any;
+}
+
 /**
  * Expose the api to the users and control the rendering of
  * styles on the document.
  */
-export default function create(type: string, styler: IStyler) {
-  let appliedStyles: unknown;
-  let appliedClassName: string;
-  let appliedStyleSheet: StyleSheet;
-  const creation = new Creation(type, styler);
-  const renderer: IRenderer = (props: any) => {
-    const { version } = props;
-    const { styles: createdStyles, type: createdType } = creation.stylize(
-      props,
-      version,
-    );
-    /**
-     * Nothing changed in styles so we will just render
-     * the component without updating the style sheet.
-     */
-    if (appliedStyles && equal(createdStyles, appliedStyles)) {
-      return renderCreation(createdType, props, appliedClassName);
+export default function create(defaultType: string, styler: IStyler) {
+  const creation = new Creation(defaultType, styler);
+  return class Renderer extends React.Component<IRendererProps> {
+    public static version = (name: string, versionStyler: IStyler) => {
+      creation.version(name, versionStyler);
+    };
+    public context: IMeta & {
+      sheets?: StyleSheet;
+      className?: string;
+    };
+    constructor(props: any) {
+      super(props);
+      const { type, styles } = creation.stylize(props, props.version);
+      this.context = {
+        type,
+        styles,
+      };
+    }
+    public componentWillUnmount() {
+      if (this.context.sheets) {
+        this.context.sheets.detach();
+      }
+    }
+    public render() {
+      const { version } = this.props;
+      const { type, styles } = creation.stylize(this.props, version);
+      const { sheets, className } = this.attachStyles({ type, styles });
+      this.updateContext({ type, styles, sheets, className });
+      return renderCreation(type, this.props, className);
     }
     /**
-     * Remove the old class name and styles.
+     * Remove an old stylesheet (if one is found) and then create a new
+     * style sheet.
      */
-    if (appliedStyleSheet) {
-      appliedStyleSheet.detach();
+    public attachStyles({
+      type,
+      styles,
+    }: IMeta): { sheets: StyleSheet; className: string } {
+      if (
+        this.context.sheets &&
+        this.context.className &&
+        equal(styles, this.context.styles) &&
+        equal(type, this.context.type)
+      ) {
+        return {
+          sheets: this.context.sheets,
+          className: this.context.className,
+        };
+      }
+      if (this.context.sheets) {
+        this.context.sheets.detach();
+      }
+      const sheets = cssinjss
+        .createStyleSheet({
+          [type]: styles,
+        })
+        .attach();
+      return {
+        sheets,
+        className: sheets.classes[type],
+      };
     }
     /**
-     * Create the new classes and attach to the dom.
+     * Patch the context of the item easily.
      */
-    const sheet = cssinjss
-      .createStyleSheet({
-        [createdType]: createdStyles as any,
-      })
-      .attach();
-    appliedStyles = createdStyles;
-    appliedStyleSheet = sheet;
-    appliedClassName = sheet.classes[createdType];
-    return renderCreation(createdType, props, appliedClassName);
+    public updateContext(overrides: { [property: string]: any }): void {
+      this.context = {
+        ...this.context,
+        ...overrides,
+      };
+    }
   };
-  renderer.version = (name: string, versionStyler: IStyler) => {
-    creation.version(name, versionStyler);
-  };
-  return renderer;
 }

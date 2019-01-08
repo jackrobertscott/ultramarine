@@ -1,13 +1,27 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, Component } from 'react';
 import Button from './creations/Button';
 
-const App: FunctionComponent<{}> = () => {
-  return (
-    <div>
-      <Button color="blue">Hello world!</Button>
-      <Button version="danger">Hello world!</Button>
-    </div>
-  );
-};
-
-export default App;
+export default class App extends Component {
+  public interval?: NodeJS.Timeout;
+  public state = {
+    color: 'green',
+  };
+  public componentDidMount() {
+    // this.interval = setInterval(() => {
+    //   this.setState({ color: this.state.color === 'green' ? 'blue' : 'green' });
+    // }, 4000);
+  }
+  public componentWillUnmount() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+  }
+  public render() {
+    return (
+      <div>
+        <Button color={this.state.color}>Hello world!</Button>
+        <Button version="danger">Hello world!</Button>
+      </div>
+    );
+  }
+}
