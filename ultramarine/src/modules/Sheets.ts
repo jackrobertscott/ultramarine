@@ -22,7 +22,7 @@ export default class Sheets {
       const data = {
         [shortId]: styles,
       };
-      const options = { meta: 'um' };
+      const options = { meta: 'ultramarine' };
       sheet = cssinjss.createStyleSheet(data, options).attach();
       this.manager.set(id, sheet);
     }

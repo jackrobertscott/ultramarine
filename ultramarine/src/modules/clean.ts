@@ -50,7 +50,7 @@ export default `
   border-top-width: medium;
   bottom: auto;
   box-shadow: none;
-  box-sizing: content-box;
+  box-sizing: border-box;
   caption-side: top;
   clear: none;
   clip: auto;
@@ -68,7 +68,7 @@ export default `
   content: normal;
   counter-increment: none;
   counter-reset: none;
-  cursor: auto;
+  cursor: inherit;
   direction: ltr;
   display: block;
   empty-cells: show;
@@ -138,7 +138,6 @@ export default `
   transition-property: none;
   transition-timing-function: ease;
   unicode-bidi: normal;
-  vertical-align: baseline;
   visibility: visible;
   white-space: normal;
   widows: 0;

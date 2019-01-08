@@ -1,16 +1,23 @@
 import * as React from 'react';
 import Creation, { IStyler, IMeta } from './Creation';
 import Sheets from './Sheets';
+import clean from './clean';
+import cssinjss from '../utils/cssinjs';
+
+const cleanStyles = cssinjss
+  .createStyleSheet({ clean }, { meta: 'ultramarine' })
+  .attach();
 
 /**
  * Create a component with the appropriate class names attached.
  */
 function renderCreation(type: string, props: any, className: string) {
   const classNames: string = props.className || '';
+  const resetClass: string = cleanStyles.classes.clean;
   const cleanedClassNames = className
-    ? classNames.replace(className, '')
-    : classNames;
-  const classes = [cleanedClassNames, className].join(' ').trim();
+    ? classNames.replace(resetClass, '').replace(className, '')
+    : classNames.replace(resetClass, '');
+  const classes = [cleanedClassNames, className, resetClass].join(' ').trim();
   return React.createElement(type, {
     ...props,
     className: classes,
