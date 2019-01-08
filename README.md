@@ -46,7 +46,7 @@ const Button = Ultra.create('div', ({ active }) => ({
   padding: '1em',
 }));
 
-Button.version('danger:button', () => ({
+Button.version('danger', () => ({
   backgroundColor: 'red',
   hover: {
     color: 'lightRed',
@@ -58,7 +58,7 @@ Button.version('danger:button', () => ({
 
 Button.version('big', () => ({
   padding: '3em',
-}));
+}), CustomComponent);
 
 export default Button;
 ```
@@ -109,7 +109,7 @@ export default Button;
 When you want to create a new version of a creation component, add in the styles and give it a name you can reference in React.
 
 ```ts
-Button.version('danger:button', () => ({
+Button.version('danger', () => ({
   backgroundColor: 'red',
   hover: {
     color: 'lightRed',
@@ -120,13 +120,13 @@ Button.version('danger:button', () => ({
 }));
 ```
 
-The name of the version follows the pattern `name:element` so that you can easily change the element type if you desire. If you don't want to change the default element of the creation, then leave it out e.g. `Button.version('big')` vs `Button.version('big:a')`.
+If you wish to change the component for the specific version, add it as the 3rd parameter e.g. `Button.version('danger', () => ({}), CustomComponent)`.
 
 ### `<Button />`
 
 To use the button, you simple add it into the dom.
 
-```
+```ts
 import Button from '../creations/Button';
 
 interface IHelloWorldProps {
@@ -135,7 +135,10 @@ interface IHelloWorldProps {
 
 const HelloWorld: FunctionComponent<IHelloWorldProps> = ({ active }) => (
   <Card>
+    <Button />
     <Button version="danger otherVersion" active={active} />
+    <Button as="span" version="danger" />
+    <Button as={CustomComponent} />
   </Card>
 );
 ```
