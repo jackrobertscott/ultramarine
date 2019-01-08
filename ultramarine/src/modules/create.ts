@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Creation, { IStyler, IMeta } from './Creation';
+import Creation, { IStyler, IMeta, IType } from './Creation';
 import Sheets from './Sheets';
 import clean from './clean';
 import cssinjss from '../utils/cssinjs';
@@ -11,17 +11,22 @@ const cleanStyles = cssinjss
 /**
  * Create a component with the appropriate class names attached.
  */
-function renderCreation(type: string, props: any, className: string) {
+function renderCreation(type: IType, props: any, className: string) {
   const classNames: string = props.className || '';
   const resetClass: string = cleanStyles.classes.clean;
   const cleanedClassNames = className
     ? classNames.replace(resetClass, '').replace(className, '')
     : classNames.replace(resetClass, '');
   const classes = [cleanedClassNames, className, resetClass].join(' ').trim();
-  return React.createElement(type, {
-    ...props,
-    className: classes,
-  });
+  return React.isValidElement(type)
+    ? React.cloneElement(type, {
+        className: classes,
+        ...props,
+      })
+    : React.createElement(type as any, {
+        ...props,
+        className: classes,
+      });
 }
 
 export interface IRendererProps {
@@ -33,12 +38,16 @@ export interface IRendererProps {
  * Expose the api to the users and control the rendering of
  * styles on the document.
  */
-export default function create(defaultType: string, styler: IStyler) {
+export default function create(defaultType: IType, styler: IStyler) {
   const sheets = new Sheets();
   const creation = new Creation(defaultType, styler);
   return class Renderer extends React.Component<IRendererProps> {
-    public static version = (name: string, versionStyler: IStyler) => {
-      creation.version(name, versionStyler);
+    public static version = (
+      name: string,
+      versionStyler: IStyler,
+      type?: IType,
+    ) => {
+      creation.version(name, versionStyler, type);
     };
     public context: IMeta & {
       id?: string;

@@ -2,24 +2,26 @@ export interface ICSS {
   [property: string]: string | ICSS;
 }
 
+export type IType = any;
+
 export interface IMeta {
   styles: ICSS;
-  type: string;
+  type: IType;
 }
 
 export type IStyler = (props: any) => ICSS;
 
 export interface IVersion {
   name: string;
-  type?: string;
+  type?: IType;
   styler: IStyler;
 }
 
 export default class Creation {
-  private defaultType: string;
+  private defaultType: IType;
   private defaultStyler: IStyler;
   private versions: Map<string, IVersion>;
-  constructor(type: string, styler: IStyler) {
+  constructor(type: IType, styler: IStyler) {
     this.defaultType = type;
     this.defaultStyler = styler;
     this.versions = new Map();
@@ -28,12 +30,11 @@ export default class Creation {
    * Adds a new version to the creation. The meta string can
    * include a type after a ":" character i.e. "exampleVersion:div".
    */
-  public version(meta: string, styler: IStyler): Creation {
-    const [name, type] = meta.split(':');
+  public version(name: string, styler: IStyler, type?: IType): Creation {
     this.versions.set(name, {
       name,
-      type,
       styler,
+      type,
     });
     return this;
   }
@@ -49,7 +50,7 @@ export default class Creation {
     const baseStyles = this.defaultStyler(props || {});
     const version = versionName ? this.versions.get(versionName) : undefined;
     const versionStyles = version ? version.styler(props) : {};
-    const type = (version && version.type) || this.defaultType;
+    const type = props.as || (version && version.type) || this.defaultType;
     const styles = Object.keys(versionStyles).reduce((css, property) => {
       if (property in css === false) {
         const message = `The property "${property}" of version "${versionName}" does not exist in the initial styles of the element.`;
