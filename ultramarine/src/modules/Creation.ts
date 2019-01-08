@@ -39,7 +39,7 @@ export default class Creation {
    * Take a property object and use it to generate the styles
    * for the creation.
    */
-  public render(props: any, versionName?: string) {
+  public stylize(props: any, versionName?: string) {
     if (versionName && !this.versions.has(versionName)) {
       const message = `The version "${versionName}" does not exist on the creation element.`;
       throw new Error(message);
@@ -47,14 +47,18 @@ export default class Creation {
     const baseStyles = this.defaultStyler(props || {});
     const version = versionName ? this.versions.get(versionName) : undefined;
     const versionStyles = version ? version.styler(props) : {};
+    const type = (version && version.type) || this.defaultType;
     const styles = Object.keys(versionStyles).reduce((css, property) => {
-      if (!css[property]) {
-        const message = `The property "${property}" does not exist on the base style group.`;
+      if (property in css === false) {
+        const message = `The property "${property}" of version "${versionName}" does not exist in the initial styles of the element.`;
         throw new Error(message);
       }
       css[property] = versionStyles[property];
       return css;
     }, baseStyles);
-    return styles;
+    return {
+      styles,
+      type,
+    };
   }
 }

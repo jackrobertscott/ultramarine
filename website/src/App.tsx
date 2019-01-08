@@ -5,6 +5,7 @@ const App: FunctionComponent<{}> = () => {
   return (
     <div>
       <Button color="blue">Hello world!</Button>
+      <Button version="danger">Hello world!</Button>
     </div>
   );
 };

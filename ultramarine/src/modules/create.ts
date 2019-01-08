@@ -2,8 +2,15 @@ import * as React from 'react';
 import * as equal from 'fast-deep-equal';
 import { StyleSheet } from 'jss';
 import cssinjss from '../utils/cssinjs';
-import { IStyler } from './Creation';
+import Creation, { IStyler } from './Creation';
 
+export type IRenderer = React.FunctionComponent<any> & {
+  version: (name: string, versionStyler: IStyler) => void;
+};
+
+/**
+ * Create a component with the appropriate class names attached.
+ */
 function renderCreation(type: string, props: any, className: string) {
   const classNames: string = props.className || '';
   const cleanedClassNames = className
@@ -16,19 +23,27 @@ function renderCreation(type: string, props: any, className: string) {
   });
 }
 
-export default function create(type: string, styles: IStyler) {
+/**
+ * Expose the api to the users and control the rendering of
+ * styles on the document.
+ */
+export default function create(type: string, styler: IStyler) {
   let appliedStyles: unknown;
   let appliedClassName: string;
   let appliedStyleSheet: StyleSheet;
-  return (...args: any[]) => {
-    const [props] = args;
-    const createdStyles = styles(props);
+  const creation = new Creation(type, styler);
+  const renderer: IRenderer = (props: any) => {
+    const { version } = props;
+    const { styles: createdStyles, type: createdType } = creation.stylize(
+      props,
+      version,
+    );
     /**
      * Nothing changed in styles so we will just render
      * the component without updating the style sheet.
      */
     if (appliedStyles && equal(createdStyles, appliedStyles)) {
-      return renderCreation(type, args[0], appliedClassName);
+      return renderCreation(createdType, props, appliedClassName);
     }
     /**
      * Remove the old class name and styles.
@@ -41,12 +56,16 @@ export default function create(type: string, styles: IStyler) {
      */
     const sheet = cssinjss
       .createStyleSheet({
-        [type]: createdStyles as any,
+        [createdType]: createdStyles as any,
       })
       .attach();
     appliedStyles = createdStyles;
     appliedStyleSheet = sheet;
-    appliedClassName = sheet.classes[type];
-    return renderCreation(type, args[0], appliedClassName);
+    appliedClassName = sheet.classes[createdType];
+    return renderCreation(createdType, props, appliedClassName);
   };
+  renderer.version = (name: string, versionStyler: IStyler) => {
+    creation.version(name, versionStyler);
+  };
+  return renderer;
 }
