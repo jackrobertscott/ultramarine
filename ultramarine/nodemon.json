@@ -1,6 +1,6 @@
 {
   "watch": ["src"],
-  "exec": "yarn build",
+  "exec": "yarn compile",
   "ext": "ts,tsx",
   "ignore": [
     "**/*.test.*",
